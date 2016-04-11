@@ -296,7 +296,9 @@ public class BluetoothChatFragment extends Fragment {
                     String writeMessage = new String(writeBuf);
                     // Make sure this is user written message before adding to adapter
                     if(!writeMessage.startsWith("ack:")) {
-                        BluetoothChatMessage bluetoothWriteMessage = new BluetoothChatMessage("Me:  " + writeMessage, System.currentTimeMillis());
+                        BluetoothChatMessage bluetoothWriteMessage =
+                                new BluetoothChatMessage("Me:  " + writeMessage,
+                                        System.currentTimeMillis(), mConnectedDeviceName);
                         mConversationArrayAdapter.add(bluetoothWriteMessage);
                     }
                     break;
@@ -311,11 +313,14 @@ public class BluetoothChatFragment extends Fragment {
                             messageToAck.setAck(true);
                             mConversationArrayAdapter.notifyDataSetChanged();
                         } catch (Exception messageNotFound) {
-                            mConversationArrayAdapter.add(new BluetoothChatMessage("Comparing: " + messageNotFound + "@"));
+                            // Recover from unfamiliar ack
                         }
                     } else {
                         // If message is from other device, add it to the adapter and send ack
-                        BluetoothChatMessage bluetoothReadMessage = new BluetoothChatMessage(mConnectedDeviceName + ":  " + readMessage, System.currentTimeMillis());
+                        BluetoothChatMessage bluetoothReadMessage =
+                                new BluetoothChatMessage(mConnectedDeviceName + ":  " + readMessage,
+                                        System.currentTimeMillis(),
+                                        "Me");
                         mConversationArrayAdapter.add(bluetoothReadMessage);
                         byte[] sendAck = ("ack:"+"Me:  " + readMessage).getBytes();
                         mChatService.write(sendAck);

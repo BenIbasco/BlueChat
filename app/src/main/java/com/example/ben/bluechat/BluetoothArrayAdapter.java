@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -29,21 +30,47 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
 
+        // Inflate layout for item view.
         if (convertView == null) {
             convertView = LayoutInflater.from(this.getContext())
                     .inflate(R.layout.message, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.itemView = (TextView) convertView.findViewById(R.id.message);
+            viewHolder.itemView = (TextView) convertView.findViewById(R.id.messageText);
 
+            // Setting the tag is used to mark this view in the UI hierarchy
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        BluetoothChatMessage item = getItem(position);
+        // Get current BluetoothChatMessage object
+        final BluetoothChatMessage item = getItem(position);
+
+        // Onclick listener for expanding message to fit all message information
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                item.incrementClickcount();
+                if((item.getClickcount() & 1) == 1) {
+                    if(item.getAck()) {
+                        viewHolder.itemView.setText(String.format(item.getDateTime() +
+                                "\nReceived by " + item.getDestination() + "\n" + item.getMessage()));
+                    } else {
+                        viewHolder.itemView.setText(String.format(item.getDateTime() + " " + item.getMessage()));
+
+                        // viewHolder.itemView.findViewById(R.id.retransmit).setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    viewHolder.itemView.setText(String.format(item.getTime() + " " + item.getMessage()));
+
+                    // viewHolder.itemView.findViewById(R.id.retransmit).setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         if (item!= null) {
             viewHolder.itemView.setText(String.format(item.getTime() + " " + item.getMessage()));
 

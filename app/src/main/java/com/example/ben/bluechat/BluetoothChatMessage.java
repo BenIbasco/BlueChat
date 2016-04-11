@@ -12,13 +12,16 @@ public class BluetoothChatMessage {
     private String message;
     private boolean ack;
     private long timestamp;
+    private String destination;
+    private int clickcount = 0;
 
     BluetoothChatMessage(String message) {
         this.message = message;
     }
-    BluetoothChatMessage(String message, long timestamp) {
+    BluetoothChatMessage(String message, long timestamp, String destination) {
         this.message = message;
         this.timestamp = timestamp;
+        this.destination = destination;
     }
 
     public String getMessage() {
@@ -32,15 +35,26 @@ public class BluetoothChatMessage {
         this.ack = status;
     }
 
-    public String getTime() {
-        /*Calendar cal = Calendar.getInstance();
-        TimeZone tz = cal.getTimeZone();*/
+    public String getDestination() {return this.destination; }
+
+    public int getClickcount() {return this.clickcount;}
+    public void incrementClickcount() {this.clickcount++;}
+
+    public String getDateTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-yy hh:mm");
 
         String time = sdf.format(new Date(timestamp));
 
         return time;
     }
+    public String getTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+
+        String time = sdf.format(new Date(timestamp));
+
+        return time;
+    }
+
 
 
 }

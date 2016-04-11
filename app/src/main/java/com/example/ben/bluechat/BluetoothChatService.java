@@ -61,6 +61,12 @@ public class BluetoothChatService {
     private ConnectedThread mConnectedThread;
     private int mState;
 
+    // The belowe fields are used in case of reconnections
+    private BluetoothDevice Last_Device;
+    private boolean Last_Secure;
+    private boolean Reconnection = false;
+    private long Last_Execution;
+
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
@@ -129,6 +135,32 @@ public class BluetoothChatService {
             mInsecureAcceptThread = new AcceptThread(false);
             mInsecureAcceptThread.start();
         }
+        //The below state checks if we need to reconnect to the last device
+        if(Reconnection == true) {
+            reconnect (Last_Device, Last_Secure);
+            Reconnection = false;
+            if (getState() != STATE_CONNECTING && getState() != STATE_CONNECTED) {
+                //BluetoothChatService.this.start();
+            }
+        }
+    }
+
+    /**
+     * If we were disconnected try to reconnect to the last device.
+     *
+     * @param device the mac address of the device we want to connect to
+     * @param secure Socket Security type - Secure (true) , Insecure (false)
+     */
+    public synchronized void reconnect(BluetoothDevice device, boolean secure) {
+
+        Last_Execution = System.currentTimeMillis();
+        while ( ( System.currentTimeMillis() - Last_Execution ) < 10000) {}
+        connect(device, secure);
+        //Log.d(TAG, "reconnecting to: " + Last_Device);
+        //BluetoothChatService.this.start();
+        //BluetoothChatService.this.start();
+
+
     }
 
     /**
@@ -485,6 +517,7 @@ public class BluetoothChatService {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
                     // Start the service over to restart listening mode
+                    Reconnection = true;
                     BluetoothChatService.this.start();
                     break;
                 }
