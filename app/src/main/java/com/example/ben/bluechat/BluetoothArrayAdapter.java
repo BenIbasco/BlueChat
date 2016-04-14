@@ -60,12 +60,10 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
                                 "\nReceived by " + item.getDestination() + "\n" + item.getMessage()));
                     } else {
                         viewHolder.itemView.setText(String.format(item.getDateTime() + " " + item.getMessage()));
-
                         // viewHolder.itemView.findViewById(R.id.retransmit).setVisibility(View.VISIBLE);
                     }
                 } else {
                     viewHolder.itemView.setText(String.format(item.getTime() + " " + item.getMessage()));
-
                     // viewHolder.itemView.findViewById(R.id.retransmit).setVisibility(View.INVISIBLE);
                 }
             }
@@ -75,8 +73,9 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
             viewHolder.itemView.setText(String.format(item.getTime() + " " + item.getMessage()));
 
             // Set BluetoothChatMessage object text color according to its ack instance var
-            int textColor = item.getAck() ? ContextCompat.getColor(this.getContext(), R.color.darkgreen) : Color.GRAY;
+            int textColor = item.getAck() ? ContextCompat.getColor(getContext(), R.color.darkgreen) : Color.GRAY;
             viewHolder.itemView.setTextColor(textColor);
+
 
         }
 
