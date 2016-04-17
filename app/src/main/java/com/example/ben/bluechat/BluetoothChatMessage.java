@@ -10,10 +10,11 @@ import java.util.TimeZone;
  */
 public class BluetoothChatMessage {
     private String message;
-    private boolean ack;
+    private boolean ack = false;
     private long timestamp;
     private String destination;
     private int clickcount = 0;
+
 
     BluetoothChatMessage(String message) {
         this.message = message;

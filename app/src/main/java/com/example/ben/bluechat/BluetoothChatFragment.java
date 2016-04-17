@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.example.ben.common.logger.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This fragment controls Bluetooth to communicate with other devices.
@@ -155,7 +156,7 @@ public class BluetoothChatFragment extends Fragment {
         mConversationMessages = new ArrayList<>();
 
         // Initialize the array adapter for the conversation thread
-        mConversationArrayAdapter = new BluetoothArrayAdapter(getActivity(), R.layout.message, mConversationMessages);
+        mConversationArrayAdapter = new BluetoothArrayAdapter(getActivity(), R.layout.message, mConversationMessages, this);
 
         mConversationView.setAdapter(mConversationArrayAdapter);
 
@@ -199,7 +200,7 @@ public class BluetoothChatFragment extends Fragment {
      *
      * @param message A string of text to send.
      */
-    private void sendMessage(String message) {
+    protected void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
             Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_SHORT).show();
@@ -418,5 +419,4 @@ public class BluetoothChatFragment extends Fragment {
         }
         return false;
     }
-
 }

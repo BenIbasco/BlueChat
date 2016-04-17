@@ -17,19 +17,22 @@ import java.util.List;
  * Created by Ben on 4/5/16.
  */
 public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
-    private ArrayList<BluetoothChatMessage> mObjects;
+    BluetoothChatFragment fragment;
 
     private static class ViewHolder {
         TextView itemView;
+        Button retransmit;
     }
 
-    public BluetoothArrayAdapter(Context context, int textViewResourceId, ArrayList<BluetoothChatMessage> items) {
-        super(context, textViewResourceId);
-        this.mObjects = items;
+    public BluetoothArrayAdapter(Context context, int textViewResourceId,
+                                 ArrayList<BluetoothChatMessage> items,
+                                 BluetoothChatFragment fragment) {
+        super(context, textViewResourceId, items);
+        this.fragment = fragment;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
 
         // Inflate layout for item view.
@@ -39,8 +42,9 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
 
             viewHolder = new ViewHolder();
             viewHolder.itemView = (TextView) convertView.findViewById(R.id.messageText);
+            viewHolder.retransmit = (Button) convertView.findViewById(R.id.retransmit);
 
-            // Setting the tag is used to mark this view in the UI hierarchy
+            // setTag is used to mark this view in the UI hierarchy
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -49,22 +53,38 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
         // Get current BluetoothChatMessage object
         final BluetoothChatMessage item = getItem(position);
 
-        // Onclick listener for expanding message to fit all message information
+        // Onclick listener for retransmit button
+        viewHolder.retransmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                retransmitMessage(position);
+            }
+        });
+
+        // Onclick listener for expanding message to fit all message information and reveal retransmission button if needed
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 item.incrementClickcount();
-                if((item.getClickcount() & 1) == 1) {
-                    if(item.getAck()) {
-                        viewHolder.itemView.setText(String.format(item.getDateTime() +
-                                "\nReceived by " + item.getDestination() + "\n" + item.getMessage()));
+                if (item.getMessage().startsWith("Me: ")) { // Is the message destination the local device or the paired device
+                    if ((item.getClickcount() & 1) == 1) {  // Is this a odd numbered click
+                        if (item.getAck()) {                // Do I have to retransmit
+                            viewHolder.itemView.setText(String.format(item.getDateTime() +
+                                    "\nReceived by " + item.getDestination() + "\n" + item.getMessage()));
+                        } else {
+                            viewHolder.itemView.setText(String.format(item.getDateTime() + " " + item.getMessage()));
+                            viewHolder.retransmit.setVisibility(View.VISIBLE);
+                        }
                     } else {
-                        viewHolder.itemView.setText(String.format(item.getDateTime() + " " + item.getMessage()));
-                        // viewHolder.itemView.findViewById(R.id.retransmit).setVisibility(View.VISIBLE);
+                        viewHolder.itemView.setText(String.format(item.getTime() + " " + item.getMessage()));
+                        viewHolder.retransmit.setVisibility(View.INVISIBLE);
                     }
-                } else {
-                    viewHolder.itemView.setText(String.format(item.getTime() + " " + item.getMessage()));
-                    // viewHolder.itemView.findViewById(R.id.retransmit).setVisibility(View.INVISIBLE);
+                } else { // If the message destination is the paired device, then there is no need to show ack information
+                    if ((item.getClickcount() & 1) == 1) { // Is this a odd numbered click
+                        viewHolder.itemView.setText(String.format(item.getDateTime() + " " + item.getMessage()));
+                    } else {
+                        viewHolder.itemView.setText(String.format(item.getTime() + " " + item.getMessage()));
+                    }
                 }
             }
         });
@@ -75,23 +95,28 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
             // Set BluetoothChatMessage object text color according to its ack instance var
             int textColor = item.getAck() ? ContextCompat.getColor(getContext(), R.color.darkgreen) : Color.GRAY;
             viewHolder.itemView.setTextColor(textColor);
-
-
         }
-
         return convertView;
     }
 
     public BluetoothChatMessage findMessage(String toFind) throws Exception {
-
         for (int i = 0; i < getCount(); i++) {
             BluetoothChatMessage temp = getItem(i);
             if (temp.getMessage().equals(toFind)) {
                 return temp;
             }
         }
-
         throw new Exception("Message not found");
     }
+
+    private void retransmitMessage(final int position) {
+        BluetoothChatMessage toRetransmit = getItem(position);
+
+        remove(toRetransmit);
+        notifyDataSetChanged();
+
+        fragment.sendMessage(toRetransmit.getMessage().substring(5));
+    }
+
 
 }
