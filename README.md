@@ -13,21 +13,23 @@ Android application that allows chat over a peer-to-peer Bluetooth network
   - BluetoothChatService
   
 # Progress (Week 03/29/16 - 04/04/16)
- - Downloaded Android Studio to create "Hello World" project.
- - Familairzed ourselves with the IDE.
- - Reviewed code we chose to modify, began to map out the path the code takes while running.
- - Added an ACK feature to the code to help confirm
+ - We each created our own "Hello World" projects to familiarize ourselves with Android Studio and Android development.
+ - Familiarized ourselves with the code of open source Google sample, and strategized how we will modify it to implement our feature goals.
+ - Chulundorj and Ben implemented message transmission.
+ - Ben added a rudimentary ACK feature.
  
 # Progress (Week 04/05/16 - 04/11/16)
- - Ben impoved ACK feature to change sender's chat color to green upon ACK.
- - Assigned work to Eduardo and Mike to prevent chat clear upon disconecction, and handler for constant bluetooth disconecction/reconecction, respectively.
- - Implemented initial reconnect feature (BlueChat/app/src/main/java/com/example/ben/bluechat/)[bluetoothchatfragent.java, bluetoothchatmessage.java, bluetootharrayadapter]
- - Fixed fatal error causing crash upon reconnection (Same files as above worked on)
- - Messages handle on click events (of message) to display message information e.g. timestamp, ACK, destination.
+ - Ben refined ACK feature by creating a new class for messages and a corresponding custom array adapter for the new message class.
+ - Assigned saving chat history feature to Eduardo.
+ - Assigned disconnected connection recovery to Chulundorj.
+ - Chulundorj implemented rudimentary reconnection feature.
+ - Ben fixed fatal error causing crash upon reconnection.
+ - Ben implemented messages to handle on click events to display message information e.g. timestamp, ACK, destination.
 
 # Progress (Week 04/12/16 - 04/18/16)
- - Work on chat history.
- - Store file on phone of past chat messages.
+ - Ben implemented message retransmission feature.
+ - Chulundorj refined reconnection feature.
+ - Ben and Chulundorj begin work on ad-hoc network.
  
 # Schedule/Goals
  - Reliability feature to resend messages upon timeout or failure.
@@ -36,8 +38,11 @@ Android application that allows chat over a peer-to-peer Bluetooth network
  - Expand BluetoothChatService in UML Diagram
  
 # Completed Goals
+ - Message transmission.
  - ACK feature to notify user of successful message transmission.
- - ACK feature with timestamp.
+ - Message timestamps.
+ - Message retransmission.
+ - Reconnection in the event of unintentional disconnected.
 
 # Environment
  - Android Studio
