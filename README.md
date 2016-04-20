@@ -30,11 +30,13 @@ Android application that allows chat over a peer-to-peer Bluetooth network
  - Ben implemented message retransmission feature.
  - Chulundorj refined reconnection feature.
  - Ben and Chulundorj begin work on ad-hoc network.
+
+# Progress (Week 04/19/16 - 04/25/16)
+ - Ben fixed the bluetooth scanning bug for Android 6.0.
+ - Ben fixed the message acknowledgement bug for identical messages.
  
 # Schedule/Goals
- - Reliability feature to resend messages upon timeout or failure.
  - Prevent bluechat from clearing chat history after device disconnect.
- - Enable dynamic disconnect/reconnect feature.
  - Expand BluetoothChatService in UML Diagram
  
 # Completed Goals
