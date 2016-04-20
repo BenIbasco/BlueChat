@@ -102,7 +102,8 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
     public BluetoothChatMessage findMessage(String toFind) throws Exception {
         for (int i = 0; i < getCount(); i++) {
             BluetoothChatMessage temp = getItem(i);
-            if (temp.getMessage().equals(toFind)) {
+            // Checking for a match on the message and if the message has received an acknowledgement
+            if (temp.getMessage().equals(toFind) && !temp.getAck()) {
                 return temp;
             }
         }

@@ -16,6 +16,7 @@
 
 package com.example.ben.bluechat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -23,7 +24,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -157,8 +161,16 @@ public class DeviceListActivity extends Activity {
             mBtAdapter.cancelDiscovery();
         }
 
+        // Check for version and if the version is greater the lollipop, check for location permission
         // Request discover from BluetoothAdapter
-        mBtAdapter.startDiscovery();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                mBtAdapter.startDiscovery();
+            }
+        } else {
+            mBtAdapter.startDiscovery();
+        }
     }
 
     /**
