@@ -61,11 +61,12 @@ public class BluetoothChatService {
     private ConnectedThread mConnectedThread;
     private int mState;
 
-    // The belowe fields are used in case of reconnections
-    private BluetoothDevice Last_Device;
-    private boolean Last_Secure;
+    // The below variables are used in case of reconnections
+    private BluetoothDevice Last_Device;    //Device mac address to connect to
+    private boolean Last_Secure;            //Device socket type to connect to
     private boolean Reconnection = false;
-    private long Last_Execution;
+    private long Last_Execution;            //Used to compute reconnection intervals
+    private int number_of_reconnection = 1; //Number of reconnections to try
 
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
@@ -137,10 +138,16 @@ public class BluetoothChatService {
         }
         //The below state checks if we need to reconnect to the last device
         if(Reconnection == true) {
-            reconnect (Last_Device, Last_Secure);
-            Reconnection = false;
             if (getState() != STATE_CONNECTING && getState() != STATE_CONNECTED) {
-                //BluetoothChatService.this.start();
+                if (number_of_reconnection > 0) {
+                    number_of_reconnection--;
+                    reconnect (Last_Device, Last_Secure);
+                    //BluetoothChatService.this.start();
+                }
+                else {
+                    number_of_reconnection = 1;
+                    Reconnection = false;
+                }
             }
         }
     }
@@ -154,12 +161,13 @@ public class BluetoothChatService {
     public synchronized void reconnect(BluetoothDevice device, boolean secure) {
 
         Last_Execution = System.currentTimeMillis();
-        while ( ( System.currentTimeMillis() - Last_Execution ) < 10000) {}
-        connect(device, secure);
-        //Log.d(TAG, "reconnecting to: " + Last_Device);
-        //BluetoothChatService.this.start();
-        //BluetoothChatService.this.start();
+        while ( ( System.currentTimeMillis() - Last_Execution ) < 1000) {}
 
+        Log.d(TAG, "reconnect to: " + device);
+
+        if(getState() != STATE_CONNECTING && getState() != STATE_CONNECTED) {
+            connect(device, secure);
+        }
 
     }
 
@@ -203,6 +211,12 @@ public class BluetoothChatService {
      */
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice
             device, final String socketType) {
+
+        //The below variables saves the last connected devices mac address
+        //The below information is used for reconnection
+        //This happens when the device receives a connection
+        Last_Device = device;
+
         Log.d(TAG, "connected, Socket Type:" + socketType);
 
         // Cancel the thread that completed the connection
@@ -331,6 +345,11 @@ public class BluetoothChatService {
         public AcceptThread(boolean secure) {
             BluetoothServerSocket tmp = null;
             mSocketType = secure ? "Secure" : "Insecure";
+
+            //The below variables saves the last connected devices secure socket type
+            //The below information is used for reconnection
+            //This happens when the device receives a connection
+            Last_Secure = secure;
 
             // Create a new listening server socket
             try {
