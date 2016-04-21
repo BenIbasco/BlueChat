@@ -23,7 +23,7 @@ Android application that allows chat over a peer-to-peer Bluetooth network
  - Assigned saving chat history feature to Eduardo.
  - Assigned disconnected connection recovery to Chulundorj.
  - Chulundorj implemented rudimentary reconnection feature.
- - Ben fixed fatal error causing crash upon reconnection.
+ - Ben fixed fatal error in color resource retrieval for messages.
  - Ben implemented messages to handle on click events to display message information e.g. timestamp, ACK, destination.
 
 # Progress (Week 04/12/16 - 04/18/16)
