@@ -29,9 +29,12 @@ Android application that allows chat over a peer-to-peer Bluetooth network
 # Progress (Week 04/12/16 - 04/18/16)
  - Ben implemented message retransmission feature.
  - Chulundorj refined reconnection feature.
- - Ben and Chulundorj begin work on ad-hoc network.
+ - Chulundorj and Ben begin work on ad-hoc network.
+    - Chulundorj is working on a custom tree data structure to store and represent the device network.
+    - Ben is working on acquiring the network information through device scanning.
 
 # Progress (Week 04/19/16 - 04/25/16)
+ - Chulundorj completed preliminary work on the custom tree data structure and now needs the network data to test it.
  - Ben fixed the bluetooth scanning bug for Android 6.0.
  - Ben fixed the message acknowledgement bug for identical messages.
  
