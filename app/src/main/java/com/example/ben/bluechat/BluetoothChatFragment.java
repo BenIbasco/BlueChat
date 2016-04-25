@@ -95,7 +95,6 @@ public class BluetoothChatFragment extends Fragment {
         }
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
