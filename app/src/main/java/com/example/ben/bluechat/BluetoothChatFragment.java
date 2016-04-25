@@ -3,6 +3,7 @@ package com.example.ben.bluechat;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.graphics.Color;
@@ -299,7 +300,7 @@ public class BluetoothChatFragment extends Fragment {
                     if(!writeMessage.startsWith("ack:")) {
                         BluetoothChatMessage bluetoothWriteMessage =
                                 new BluetoothChatMessage("Me:  " + writeMessage,
-                                        System.currentTimeMillis(), mConnectedDeviceName);
+                                        System.currentTimeMillis());
                         mConversationArrayAdapter.add(bluetoothWriteMessage);
                     }
                     break;
@@ -320,8 +321,7 @@ public class BluetoothChatFragment extends Fragment {
                         // If message is from other device, add it to the adapter and send ack
                         BluetoothChatMessage bluetoothReadMessage =
                                 new BluetoothChatMessage(mConnectedDeviceName + ":  " + readMessage,
-                                        System.currentTimeMillis(),
-                                        "Me");
+                                        System.currentTimeMillis());
                         mConversationArrayAdapter.add(bluetoothReadMessage);
                         byte[] sendAck = ("ack:"+"Me:  " + readMessage).getBytes();
                         mChatService.write(sendAck);
@@ -376,7 +376,7 @@ public class BluetoothChatFragment extends Fragment {
     }
 
     /**
-     * Establish connection with other divice
+     * Establish connection with other device
      *
      * @param data   An {@link Intent} with {@link DeviceListActivity#EXTRA_DEVICE_ADDRESS} extra.
      * @param secure Socket Security type - Secure (true) , Insecure (false)

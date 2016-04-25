@@ -6,41 +6,31 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * Created by Ben on 4/5/16.
+ * This class is used to hold all the data of individual messages.
  */
 public class BluetoothChatMessage {
+    // Message information
     private String message;
     private boolean ack = false;
     private long timestamp;
-    private String destination;
+
+    // Click count for each message to know if we should show more info or not in the view
     private int clickcount = 0;
 
-
+    /**
+     * Constructors
+     */
     BluetoothChatMessage(String message) {
         this.message = message;
     }
-    BluetoothChatMessage(String message, long timestamp, String destination) {
+    BluetoothChatMessage(String message, long timestamp) {
         this.message = message;
         this.timestamp = timestamp;
-        this.destination = destination;
     }
 
-    public String getMessage() {
-        return this.message;
-    }
-
-    public boolean getAck() {
-        return this.ack;
-    }
-    public void setAck(boolean status) {
-        this.ack = status;
-    }
-
-    public String getDestination() {return this.destination; }
-
-    public int getClickcount() {return this.clickcount;}
-    public void incrementClickcount() {this.clickcount++;}
-
+    /**
+     * Getters for date and time conversion from timestamp
+     */
     public String getDateTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-yy hh:mm");
 
@@ -56,6 +46,20 @@ public class BluetoothChatMessage {
         return time;
     }
 
+    /**
+     * Simple getters and setters
+     */
+    public String getMessage() {
+        return this.message;
+    }
 
+    public boolean getAck() {
+        return this.ack;
+    }
+    public void setAck(boolean status) {
+        this.ack = status;
+    }
 
+    public int getClickcount() {return this.clickcount;}
+    public void incrementClickcount() {this.clickcount++;}
 }

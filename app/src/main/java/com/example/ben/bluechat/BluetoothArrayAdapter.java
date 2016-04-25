@@ -1,5 +1,6 @@
 package com.example.ben.bluechat;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Ben on 4/5/16.
+ * Custom ArrayAdapter to accommodate BluetoothChatMessage and handle correct representation in views
  */
 public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
     BluetoothChatFragment fragment;
@@ -24,6 +25,14 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
         Button retransmit;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param context The UI Activity Context
+     * @param textViewResourceId UI layout to be used for individual messages
+     * @param items ArrayList to store BlueChatMessages
+     * @param fragment The UI fragment that is instantiating this ArrayAdapter
+     */
     public BluetoothArrayAdapter(Context context, int textViewResourceId,
                                  ArrayList<BluetoothChatMessage> items,
                                  BluetoothChatFragment fragment) {
@@ -31,6 +40,16 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
         this.fragment = fragment;
     }
 
+    /**
+     * Method to describe the translation between the data item and the View to display.
+     * This method is called for each item in the list you pass to your adapter and is initially
+     * called when the adapter is set.
+     * @param position Position of the current item in the ArrayList
+     * @param convertView Since ArrayAdapters use View cycling, this is the old view to use.
+     * @param parent Is the parent UI's view so each message view can inflate into that for
+     *               proper layout parameters.
+     * @return convertView
+     */
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
@@ -70,7 +89,7 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
                     if ((item.getClickcount() & 1) == 1) {  // Is this a odd numbered click
                         if (item.getAck()) {                // Do I have to retransmit
                             viewHolder.itemView.setText(String.format(item.getDateTime() +
-                                    "\nReceived by " + item.getDestination() + "\n" + item.getMessage()));
+                                    "\nMessage successfully received" + "\n" + item.getMessage()));
                         } else {
                             viewHolder.itemView.setText(String.format(item.getDateTime() + " " + item.getMessage()));
                             viewHolder.retransmit.setVisibility(View.VISIBLE);
@@ -90,6 +109,7 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
         });
 
         if (item!= null) {
+            // Set the text for text view to hold the timestamp and message string
             viewHolder.itemView.setText(String.format(item.getTime() + " " + item.getMessage()));
 
             // Set BluetoothChatMessage object text color according to its ack instance var
@@ -99,6 +119,12 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
         return convertView;
     }
 
+    /**
+     * Method to find a specific message string in the adapter and returns the first unacknowledged
+     * message match.
+     * @param toFind
+     * @throws Exception - An exception is thrown if a match is not found.
+     */
     public BluetoothChatMessage findMessage(String toFind) throws Exception {
         for (int i = 0; i < getCount(); i++) {
             BluetoothChatMessage temp = getItem(i);
@@ -110,6 +136,10 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
         throw new Exception("Message not found");
     }
 
+    /**
+     * Method to retransmit a message by removing the message from the list and sending it again.
+     * @param position Position in the list of the message to be retransmitted
+     */
     private void retransmitMessage(final int position) {
         BluetoothChatMessage toRetransmit = getItem(position);
 
@@ -119,5 +149,17 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
         fragment.sendMessage(toRetransmit.getMessage().substring(5));
     }
 
+    /**
+     * Method to support database saving by returning a list of strings representing the messages
+     */
+    public ArrayList<String> getMessages() {
+        ArrayList<String> listOfMessageStrings = new ArrayList<String>();
 
+        for (int i = 0; i < getCount(); i++) {
+            BluetoothChatMessage temp = getItem(i);
+            listOfMessageStrings.add(temp.getTime() + " " + temp.getMessage());
+        }
+
+        return listOfMessageStrings;
+    }
 }

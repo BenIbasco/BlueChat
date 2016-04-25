@@ -1,5 +1,6 @@
 package com.example.ben.bluechat;
 
+import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
