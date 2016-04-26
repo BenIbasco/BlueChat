@@ -11,7 +11,7 @@ Android application that allows chat over a peer-to-peer Bluetooth network
   - BluetoothChatMessage (Completely new)
   - BluetoothChatFragment (Most changes are in Handler class)
   - BluetoothChatService
-  - AndroidManifest.xml (Locked screen rotation)
+  - AndroidManifest.xml
   
 # Progress (Week 03/29/16 - 04/04/16)
  - We each created our own "Hello World" projects to familiarize ourselves with Android Studio and Android development.
