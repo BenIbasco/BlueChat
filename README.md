@@ -36,6 +36,7 @@ Android application that allows chat over a peer-to-peer Bluetooth network
 
 # Progress (Week 04/19/16 - 04/25/16)
  - Chuluundorj completed preliminary work on the custom tree data structure and now needs the network data to test it.
+ - Chuluundorj fixed screen orientation bug
  - Ben fixed the bluetooth scanning bug for Android 6.0.
  - Ben fixed the message acknowledgement bug for identical messages.
  
