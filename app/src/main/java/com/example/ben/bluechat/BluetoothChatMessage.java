@@ -45,6 +45,9 @@ public class BluetoothChatMessage {
 
         return time;
     }
+    public String getMiliseconTime() {
+        return Long.toString(timestamp);
+    }
 
     /**
      * Simple getters and setters

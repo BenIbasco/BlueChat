@@ -157,7 +157,7 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
 
         for (int i = 0; i < getCount(); i++) {
             BluetoothChatMessage temp = getItem(i);
-            listOfMessageStrings.add(temp.getTime() + " " + temp.getMessage());
+            listOfMessageStrings.add(String.valueOf(temp.getAck()) + temp.getMiliseconTime() + temp.getMessage());
         }
 
         return listOfMessageStrings;
