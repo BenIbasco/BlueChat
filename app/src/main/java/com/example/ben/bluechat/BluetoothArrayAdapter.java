@@ -99,6 +99,7 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
                         viewHolder.retransmit.setVisibility(View.INVISIBLE);
                     }
                 } else { // If the message destination is the paired device, then there is no need to show ack information
+                    viewHolder.retransmit.setVisibility(View.INVISIBLE);
                     if ((item.getClickcount() & 1) == 1) { // Is this a odd numbered click
                         viewHolder.itemView.setText(String.format(item.getDateTime() + " " + item.getMessage()));
                     } else {
@@ -157,7 +158,7 @@ public class BluetoothArrayAdapter extends ArrayAdapter<BluetoothChatMessage> {
 
         for (int i = 0; i < getCount(); i++) {
             BluetoothChatMessage temp = getItem(i);
-            listOfMessageStrings.add(String.valueOf(temp.getAck()) + temp.getMiliseconTime() + temp.getMessage());
+            listOfMessageStrings.add(String.valueOf(temp.getMiliseconTime() + temp.getMessage()));
         }
 
         return listOfMessageStrings;
