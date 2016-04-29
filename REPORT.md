@@ -8,7 +8,8 @@ Our group wanted to build a communication service that could be available in the
  - To make connections, the application must initiate bluetooth discovery to find out what are the available devices to connect to. Then the user selects a device in order to initiate a connection.
  - The bluetooth adapter of the receiving device will then accept the connection and so the two devices will be paired and allow data transmission through input and output streams from the bluetooth adapters.
  - In the event of an unintentional disconnection, the application is designed to initiate a reconnection after 1 second. Even though it's possible for both devices to initiate a reconnection, the first reconnection attempt will always be accepted and any connection attempts that occur after are ignored.
-<img src="diagrams/Connections.png" alt="Connection Behavior"/>
+
+ <img src="diagrams/Connections.png" alt="Connection Behavior"/>
 
 **Message Transmission Behavior**
  - Messages are sent as arrays of bytes and trigger acknowledgements from the other device.
