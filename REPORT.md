@@ -6,5 +6,5 @@
 
 # File Structure
 
-<img src="diagrams/uml1.png" alt="UML Diagram Part 1"/>
 <img src="diagrams/uml2.png" alt="UML Diagram Part 2"/>
+<img src="diagrams/uml1.png" alt="UML Diagram Part 1"/>
