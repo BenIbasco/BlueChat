@@ -3,9 +3,9 @@ package com.example.ben.bluechat;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,6 +37,9 @@ import java.util.List;
  * This fragment controls Bluetooth to communicate with other devices.
  */
 public class BluetoothChatFragment extends Fragment {
+    //Database
+    MySQLiteHelper database;
+    private long timeHelper;
 
     private static final String TAG = "BluetoothChatFragment";
 
@@ -82,6 +85,7 @@ public class BluetoothChatFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        database = new MySQLiteHelper(getActivity());
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         // Get local Bluetooth adapter
@@ -94,6 +98,7 @@ public class BluetoothChatFragment extends Fragment {
             activity.finish();
         }
     }
+
 
     @Override
     public void onStart() {
@@ -281,6 +286,8 @@ public class BluetoothChatFragment extends Fragment {
                         case BluetoothChatService.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                             mConversationArrayAdapter.clear();
+                            //Pull chat history if it exists
+                            restoreMessages();
                             break;
                         case BluetoothChatService.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
@@ -301,6 +308,7 @@ public class BluetoothChatFragment extends Fragment {
                                 new BluetoothChatMessage("Me:  " + writeMessage,
                                         System.currentTimeMillis());
                         mConversationArrayAdapter.add(bluetoothWriteMessage);
+                        storeMessages(mConnectedDeviceName, mConversationArrayAdapter);
                     }
                     break;
                 case Constants.MESSAGE_READ:
@@ -324,6 +332,7 @@ public class BluetoothChatFragment extends Fragment {
                         mConversationArrayAdapter.add(bluetoothReadMessage);
                         byte[] sendAck = ("ack:"+"Me:  " + readMessage).getBytes();
                         mChatService.write(sendAck);
+                        storeMessages(mConnectedDeviceName, mConversationArrayAdapter);
                     }
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
@@ -338,8 +347,37 @@ public class BluetoothChatFragment extends Fragment {
                     if (null != activity) {
                         Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
                                 Toast.LENGTH_SHORT).show();
+                        //Clear array out
+                        mConversationArrayAdapter.clear();
                     }
                     break;
+            }
+        }
+        //Add a message to the database, updateLog will check to see if Chat exists.
+        public void storeMessages(String deviceName, BluetoothArrayAdapter messages) {
+            ChatHistory storeChat = new ChatHistory(deviceName, messages.getMessages());
+            database.updateLog(storeChat);
+        }
+        //Build object, check to see if device has chat history, if chat history exists
+        //Parse out substring to grab time and the message.
+        public void restoreMessages(){
+            ArrayList<String> chatHistory = database.getChat(mConnectedDeviceName);
+            if(chatHistory.isEmpty()){
+                BluetoothChatMessage bluetoothWriteMessage =
+                        new BluetoothChatMessage("This was an empty chat previously.",
+                                System.currentTimeMillis());
+                mConversationArrayAdapter.add(bluetoothWriteMessage);
+            } else {
+                String chatMessageHelper;
+                for (int messageCounter = 0; messageCounter < chatHistory.size(); messageCounter++) {
+                    chatMessageHelper = chatHistory.get(messageCounter);
+                    timeHelper = Long.valueOf(chatMessageHelper.replaceAll("\\D+", ""));
+                    //For future improvement implment parsing substring to check for ACK to highlight it green
+                    chatMessageHelper = chatMessageHelper.substring(chatMessageHelper.indexOf(' ') +1);
+                    BluetoothChatMessage bluetoothWriteMessage =
+                            new BluetoothChatMessage(" "  + chatMessageHelper, timeHelper);
+                    mConversationArrayAdapter.add(bluetoothWriteMessage);
+                }
             }
         }
     };
@@ -375,7 +413,7 @@ public class BluetoothChatFragment extends Fragment {
     }
 
     /**
-     * Establish connection with other device
+     * Establish connection with other divice
      *
      * @param data   An {@link Intent} with {@link DeviceListActivity#EXTRA_DEVICE_ADDRESS} extra.
      * @param secure Socket Security type - Secure (true) , Insecure (false)
