@@ -43,7 +43,7 @@ Android application that allows chat over a peer-to-peer Bluetooth network
  
  # Progress (Week 04/26/16 - 04/28/16)
  - Eduardo completed rudimentary chat history saving feature.
- - Ben and Chuluundorj work presentation diagrams.
+ - Ben and Chuluundorj complete presentation diagrams.
 
 # Completed Goals
  - Message transmission.
