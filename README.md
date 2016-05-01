@@ -41,16 +41,21 @@ Android application that allows chat over a peer-to-peer Bluetooth network
  - Ben fixed the bluetooth scanning bug for Android 6.0.
  - Ben fixed the message acknowledgement bug for identical messages.
  
-# Schedule/Goals
- - Prevent bluechat from clearing chat history after device disconnect.
- - Expand BluetoothChatService in UML Diagram
- 
+ # Progress (Week 04/26/16 - 04/28/16)
+ - Eduardo completed rudimentary chat history saving feature.
+ - Ben and Chuluundorj work presentation diagrams.
+
 # Completed Goals
  - Message transmission.
  - ACK feature to notify user of successful message transmission.
  - Message timestamps.
  - Message retransmission.
  - Reconnection in the event of unintentional disconnected.
+ - Message history saving
+ - Reliable Bluetooth scanning on Android 6.0
+
+# Demonstrations
+<img src="videodemo/baseProject.mp4" alt="Original Project"/>
 
 # Environment
  - Android Studio
