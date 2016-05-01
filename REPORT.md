@@ -3,23 +3,31 @@ Our group wanted to build a communication service that could be available in the
 
 # Project Design
 **Approach**
+
 The approach to this project consisted of a few elements that were discussed as a team.  First, we had to identify what networking problem we wanted our project to solve and what development tools or languages did we want to learn more about. We wanted to be able to provide a chat service without needing wifi or a data plan. As a result, we decided on a bluetooth reliant messaging service written in java for the the android platform.  We discussed how we were going to create the project by either creating the GUI and bluetooth sockets, or improving a previously existing open source project.  We decided to use google’s bluetooth chat service, https://github.com/googlesamples/android-BluetoothChat, as our framework in order to accelerate the process of learning the Android platform abstraction for the UI and Bluetooth API.  With this open source project we identified what features were missing, what bugs needed to be fixed, and how we could implement an ad-hoc network.
 
 Once we decided on the bluetooth chat service, we studied what the source code had already accomplished.  We found that the Google sample we chose only provided basic functions and UI, but had a lot of limitations such as, random crashes involving bluetooth scanning, phone screen rotation, and no chat history feature. The issues we decided to focus on are reconnection upon disconnection, message acknowledgement  and retransmission, and chat history.  Dividing these tasks amongst our group involved quite a bit of collaboration between the three of us.
 
 **Collaboration**
+
 For collaboration, we all decided to take ownership of at least one major feature each, and then members were free to work on minor features and bug fixes that we discovered while working on the project. Some of the major features we were working on had an effect on each other, so we made sure to properly design how we were going to implement the major features and then let the entire group aware of this design. An example of this is the implementation of message acknowledgement and retransmission where Ibasco decided to create a new message class, which would affect how messages are stored. Ibasco let Pozo know the member variables of each chat message object and wrote supporting methods for him to support message saving.
 
 Because the design process was broken up into pieces/classes that had little to do with each other, testing was made simpler. When testing, each member of the team tested his or her changes independently before pushing the changes. However, collisions could not be avoided completely. Some changes made by a team member introduced new problems that needed to be fixed  on one’s own code.
 
+Furthermore, breaking up each individual’s responsibility required that tasks assigned to teammates did not impede other members progress. As a result, each team member focused on a specific class that had minimum overlap with another teammates responsibility, but it was difficult to keep collisions to zero. In the testing phase, some collisions appeared.
+
 **Testing**
+
 Ibasco’s Testing
+
 As mentioned above, Ibasco’s changes were concerned with message acknowledgement and retransmission. Since, Ibasco cannot control when a message will not reach the other device, he decided to use the older version of BlueChat on one phone and the newer version with message acknowledgement and retransmission on the other phone. As a result, when the devices connected with each other, the older version would not send an ACK back, so the message would not turn green and the retransmission button would appear on the newer version of the application. Furthermore, Ibasco could format the reply in the older version of the app to send an ACK for a specific message.
 
 Pozo’s Testing
+
 Pozo’s testing involved disconnecting and reconnecting to the same device to test if previous messages saved in the database would appear again. However, before Pozo reached this phase of the testing he encountered several problems instantiating variables of SQLhelper and finding the location of the problem. Pozo got around this problem by using the log to print out strings to find where the program was stopping. Furthermore, Pozo found out that he had problems creating multiple database and not clearing them when the application terminated.
 
 Chuluundorj’s Testing
+
 Chuluundorj’s testing involved creating artificial disconnection to test the reconnection feature. Chuluundorj achieved this goal by turning of the Bluetooth on one of the devices and letting the other device initiate the reconnection. Before the reconnection attempt, the bluetooth needed to be turned on again. As a result, Chuluundorj set the timeout of the reconnection to 10 seconds to make room for the relaunch of the application. He successfully tested the reconnection feature and set the timeout to 1 second before pushing it. Furthermore, Chuluundorj set the reconnection feature to only on try.
 
 **Conclusion**

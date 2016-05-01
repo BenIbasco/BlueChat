@@ -55,7 +55,15 @@ Android application that allows chat over a peer-to-peer Bluetooth network
  - Reliable Bluetooth scanning on Android 6.0
 
 # Demonstrations
-<img src="videodemo/baseProject.mp4" alt="Original Project"/>
+All video files are inside the BlueChat/videodemo/ directory
+
+ReconnectGalaxy.mp4 and ReconnectMoto.mp4 showcase the reconnection feature.
+
+baseProject.mp4 and noAcknowledgement.mp4 showcase the original project and what happens during the event that our application does not receive an message acknowledgement.
+
+messageTransmission.mp4 showcases the normal behavior of our application during message transmission.
+
+messageHistory.mp4 showcases the rudimentary message history saving feature.
 
 # Environment
  - Android Studio
