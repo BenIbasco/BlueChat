@@ -31,6 +31,7 @@ Chuluundorj’s Testing
 Chuluundorj’s testing involved creating artificial disconnection to test the reconnection feature. Chuluundorj achieved this goal by turning of the Bluetooth on one of the devices and letting the other device initiate the reconnection. Before the reconnection attempt, the bluetooth needed to be turned on again. As a result, Chuluundorj set the timeout of the reconnection to 10 seconds to make room for the relaunch of the application. He successfully tested the reconnection feature and set the timeout to 1 second before pushing it. Furthermore, Chuluundorj set the reconnection feature to only on try.
 
 **Conclusion**
+
 In conclusion, although some improvements could have been made, the breaking up of responsibilities was done correctly. Furthermore, we did not do enough research before choosing our topic, thus the difficulties in creating a bluetooth based ad-hoc network were unseen. Bluetooth is not designed for ad-hoc network, unless it is in master slave mode, because Bluetooth does not support multiple connections. Furthermore, disconnecting and reconnecting to another device requires at least 3 seconds; considering how many nodes the message needs to traverse before reaching its final destination, it is unrealistic.
 
 **Connection Behavior**
